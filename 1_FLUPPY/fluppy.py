@@ -1,7 +1,7 @@
 import asyncio
 import re, time, argparse, sys, platform, os, json
 from pathlib import Path
-from collections import deque
+from collections import deque, Counter, defaultdict
 
 try:
     import yaml
@@ -35,47 +35,6 @@ def pp(x, color='', strext=''):
             '': x
     }
     print(f'{colors[color]} {strext}')
-
-# async def watch(path: str, rules: list, verbose=False):
-#     if not os.path.exists(path):
-#         return
-
-#     compiled = [(r['name'], re.compile(r['regex']), r['threshold'], r['window'], r['action'], deque()) for r in rules]
-
-#     with open(path) as f:
-#         #f.seek(0, 2)
-#         pp(f"[+] Watching {path}..","c")
-#         while True:
-#             try:
-#                 line = f.readline()
-#                 if line:
-#                     now = time.monotonic()
-#                     for name, rx, threshold, window, action, hits in compiled:
-#                         if rx.search(line):
-#                             hits.append(now)
-#                             while hits and hits[0] < now - window:
-#                                 hits.popleft()
-#                             if len(hits) >= threshold:
-#                                 # print(json.dumps({
-#                                 #     "action": action.upper(),
-#                                 #     "rule": name,
-#                                 #     "file": Path(path).name,
-#                                 #     "threshold": threshold,
-#                                 #     "window": window,
-#                                 #     "line": line.strip()
-#                                 # }))
-#                                 pp(f"[{action.upper()}] {name} in {Path(path).name}: threshold {threshold} hit in {window}","r")
-#                                 if verbose:
-#                                     print(f'>> match {line}')    
-#                                 else:
-#                                     print(f'>> match {rx.search(line)[0]}')
-#                                 hits.clear()
-#                 else:
-#                     await asyncio.sleep(0.1)
-#             except asyncio.CancelledError:
-#                 # print("Bailing..")
-#                 raise
-from collections import deque, Counter, defaultdict
 
 async def watch(path: str, rules: list, mode="tail", verbose=False):
     if not os.path.exists(path):
@@ -179,10 +138,6 @@ async def main():
          print('\n')
          sys.exit(0)
     
-    # verbose=False
-    # if args.verbose:
-    #     verbose=True
-
     # otherwise, go forth
     with open(args.config) as f:
         config = yaml.safe_load(f)
