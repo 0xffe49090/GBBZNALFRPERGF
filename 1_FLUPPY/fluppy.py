@@ -21,6 +21,12 @@ except Exception as e:
 
     sys.exit(1)
 
+try:
+    import yara
+except:
+    print("Missing Yara. Install yara --> `pip install yara-python`.")
+    sys.exit(1)
+
 def pp(x, color='', strext=''):
     if platform.system() == "Windows":
         os.system('color')
@@ -32,9 +38,15 @@ def pp(x, color='', strext=''):
             'm': f"\033[0;95m{x}\033[0m",
             'y': f"\033[0;93m{x}\033[0m",
             'k': f"\033[0;90m{x}\033[0m",
+            'critical': f"\033[0;95m{x}\033[0m",
+            'high': f"\033[0;31m{x}\033[0m",
+            'medium': f"\033[0;93m{x}\033[0m",
+            'low': f"\033[0;92m{x}\033[0m",
+            'info': f"\033[0;34m{x}\033[0m",
             '': x
     }
     print(f'{colors[color]} {strext}')
+
 
 async def watch(path: str, rules: list, mode="tail", verbose=False):
     if not os.path.exists(path):
@@ -43,10 +55,10 @@ async def watch(path: str, rules: list, mode="tail", verbose=False):
     compiled = [
         (
             r["name"],
-            re.compile(r["regex"]),
+            re.compile(r["regex"],re.IGNORECASE),
             r["threshold"],
             r["window"],
-            r["action"],
+            r["severity"],
             r.get("cooldown", 60),
             defaultdict(deque),
             {}
@@ -60,8 +72,6 @@ async def watch(path: str, rules: list, mode="tail", verbose=False):
         if mode == "tail":
             f.seek(0, 2)
 
-        pp(f"[+] {mode.upper()} {path}..", "c")
-
         while True:
             line = f.readline()
 
@@ -73,13 +83,17 @@ async def watch(path: str, rules: list, mode="tail", verbose=False):
 
             now = time.monotonic()
 
-            for name, rx, threshold, window, action, cooldown, hitmap, last_alert in compiled:
+            for name, rx, threshold, window, severity, cooldown, hitmap, last_alert in compiled:
                 m = rx.search(line)
                 if not m:
                     continue
 
                 match = m.group(1) if m.lastindex else m.group(0)
                 hitval = line.strip() if verbose else match
+
+                if mode == "scan":
+                    summary[(severity, name, Path(path).name, threshold, window)][hitval] += 1
+                    continue
 
                 hits = hitmap[match]
                 hits.append(now)
@@ -92,23 +106,24 @@ async def watch(path: str, rules: list, mode="tail", verbose=False):
                     last = last_alert.get(alert_key, 0)
 
                     if now - last >= cooldown:
-                        pp(f"[{action.upper()}] {name} in {Path(path).name}: threshold {threshold} hit in {window}", "r")
-                        print(f">> match {hitval}")
+                        pp(f"[{severity.upper()}] {name} in {Path(path).name}: threshold {threshold} hit in {window} seconds.", severity)
+                        print(f"  >> match {hitval}")
                         last_alert[alert_key] = now
 
                     hits.clear()
 
-    if mode == "scan":
-        for (action, name, file, threshold, window), counts in summary.items():
-            total = sum(counts.values())
+        if mode == "scan":
+            for (severity, name, file, threshold, window), counts in summary.items():
+                
+                total = sum(counts.values())
 
-            if total < threshold:
-                continue
+                if total < threshold:
+                    continue
 
-            pp(f"[{action.upper()}] {name} in {file}: {total} total hits; threshold {threshold}", "r")
+                pp(f"[{severity.upper()}] {name} in {file}: {total} total hits; threshold {threshold}", severity)
 
-            for value, count in counts.most_common(10):
-                print(f"  {value} x {count}")
+                for value, count in counts.most_common(10):
+                    print(f"  {value} [{count}]")
 
 async def main():
     parser = argparse.ArgumentParser(add_help=False)
@@ -143,6 +158,9 @@ async def main():
         config = yaml.safe_load(f)
 
     sources = config["sources"]
+    for s in sources:
+        pp(f"[*] Watching {s.get('path')} with mode {s.get('mode')}.","k")
+        
     await asyncio.gather(*[watch(s["path"], s["rules"], mode=s.get("mode", "tail"), verbose=args.verbose) for s in sources])
 
 try:
