@@ -3,7 +3,7 @@
 
 ## About
 
-**fluppy* is a log tailing tool to identify patterns. It takes a YAML file, and a set of configurations within. 
+**fluppy** is a log tailing tool to identify patterns. It takes a YAML file, and a set of configurations within. 
 
 Currently, fluppy takes regular expressions which are then used to process logs (or really, any text file) for patterns. An example use-case might be to watch an Apache HTTP log for attacks, or to monitor a file for sensitive information. 
 
