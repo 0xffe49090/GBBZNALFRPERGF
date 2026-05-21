@@ -45,7 +45,11 @@ def pp(x, color='', strext=''):
             'info': f"\033[0;34m{x}\033[0m",
             '': x
     }
-    print(f'{colors[color]} {strext}')
+    try:
+        print(f'{colors[color]} {strext}')
+    except:
+        print(x)
+        pass
 
 
 async def watch(path: str, rules: list, mode="tail", verbose=False):
