@@ -75,3 +75,23 @@ sources:
         cooldown: 300
         window: 3
         severity: medium
+  
+  - path: /var/log/syslog
+    mode: tail
+    rules:
+      - name: dlp_secret_data
+        regex: '(SECRET-DATA-HERE)'
+        threshold: 1
+        cooldown: 300
+        window: 60
+        severity: critical
+
+  - path: /var/log/syslog
+    mode: tail
+    rules:
+      - name: dlp_card_rule
+        regex: '(4\d{15})'
+        threshold: 1
+        cooldown: 300
+        window: 60
+        severity: critical
