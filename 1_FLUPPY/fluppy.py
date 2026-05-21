@@ -202,10 +202,31 @@ async def main():
         sys.exit(1)
 
     sources = config["sources"]
+    
+    # AI suggested improvement was to look for valid source here
+    # a minor adjustment to ensure no invalid files are passed to the program. 
+    # This makes for a better user experience and keeps the source reporting
+    # in one place. 
+    valid_sources = []
+
     for s in sources:
-        pp(f"[*] Watching {s.get('path')} with mode {s.get('mode')}.","k")
-        
-    await asyncio.gather(*[watch(s["path"], s["rules"], mode=s.get("mode", "tail"), verbose=args.verbose) for s in sources])
+        if not os.path.exists(s.get("path")):
+            pp(f"[-] Log source not found {s.get('path')}.", "r")
+            continue
+
+        pp(f"[*] Watching {s.get('path')} with mode {s.get('mode')}.", "k")
+        valid_sources.append(s)
+
+    # okay now send each source to the program for searching
+    await asyncio.gather(*[
+        watch(
+            s["path"],
+            s["rules"],
+            mode=s.get("mode", "tail"),
+            verbose=args.verbose
+        )
+        for s in valid_sources
+    ])
 
 try:
     # the main event async
