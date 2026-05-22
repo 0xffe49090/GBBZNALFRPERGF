@@ -1,0 +1,5 @@
+May  4 07:48:52 host kernel: [135844.596357] usb 3-4.2: USB disconnect, device number 9
+May  6 10:12:05 host kernel: [217220.983588] sample.bin[1842512]: segfault at 7fffaa1c210f ip 000000000041356d sp 00007fffffffd120 error 6 in sample.bin[501000+c7000]
+May  6 10:12:05 host kernel: [217220.983607] Code: 1a 0f 00 b8 00 00 00 00 e8 72 04 02 00 8b 55 f8 83 e0 01 85 c0 74 07 ba 5a 00 00 00 eb 05 ba 41 00 00 00 8b 55 e0 83 e8 01 48 98 <89> 54 06 e8 c7 55 f0 00 00 00 00 e9 af 00 00 00 8b 55 f0 48 63 d0
+May  6 10:24:15 host kernel: [217951.781834] traps: sample.bin[1842604] trap stack segment ip:41356d sp:7fffffffd120 error:0 in sample.bin[501000+c7000]
+May  6 10:43:11 host kernel: [219087.094821] traps: sample.bin[1842888] trap stack segment ip:41356d sp:7fffffffd120 error:0 in sample.bin[501000+c7000]

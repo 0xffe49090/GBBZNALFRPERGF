@@ -62,9 +62,9 @@ async def watch(path: str, rules: list, mode="tail", verbose=False):
 
     '''
     # check for the source file
-    if not os.path.exists(path):
-        pp(f"[-] Log source not found {path}.","r")
-        return
+    # if not os.path.exists(path):
+    #     pp(f"[-] Log source not found {path}.","r")
+    #     return
 
     # get yaml elements
     compiled = [

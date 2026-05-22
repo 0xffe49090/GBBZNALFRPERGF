@@ -1,0 +1,52 @@
+May 19 19:01:01 company-www CRON[2408217]: pam_unix(cron:session): session closed for user smmsp
+May 19 19:09:01 company-www CRON[2408243]: pam_unix(cron:session): session opened for user root by (uid=0)
+May 19 19:09:01 company-www CRON[2408243]: pam_unix(cron:session): session closed for user root
+May 19 19:10:07 company-www sshd[2408309]: Accepted publickey for ubuntu from 10.0.0.1 port 63051 ssh2: ED25519 SHA256:bGFycnk0MDAwMjA5ODM0OTAyMzQ5ODIzNDkw
+May 19 19:10:07 company-www sshd[2408309]: pam_unix(sshd:session): session opened for user ubuntu by (uid=0)
+May 19 19:10:07 company-www systemd-logind[553]: New session 57209 of user ubuntu.
+May 19 19:10:07 company-www systemd: pam_unix(systemd-user:session): session opened for user ubuntu by (uid=0)
+May 19 19:17:01 company-www CRON[2408501]: pam_unix(cron:session): session opened for user root by (uid=0)
+May 19 19:17:01 company-www CRON[2408501]: pam_unix(cron:session): session closed for user root
+May 19 19:20:01 company-www CRON[2408505]: pam_unix(cron:session): session opened for user smmsp by (uid=0)
+May 19 19:21:01 company-www CRON[2408505]: pam_unix(cron:session): session closed for user smmsp
+May 19 19:39:01 company-www CRON[2408573]: pam_unix(cron:session): session opened for user root by (uid=0)
+May 19 19:39:01 company-www CRON[2408573]: pam_unix(cron:session): session closed for user root
+May 19 19:40:01 company-www CRON[2408629]: pam_unix(cron:session): session opened for user smmsp by (uid=0)
+May 19 19:41:01 company-www CRON[2408629]: pam_unix(cron:session): session closed for user smmsp
+May 19 20:00:01 company-www CRON[2408673]: pam_unix(cron:session): session opened for user smmsp by (uid=0)
+May 19 20:01:01 company-www CRON[2408673]: pam_unix(cron:session): session closed for user smmsp
+May 19 21:17:01 company-www CRON[2409239]: pam_unix(cron:session): session opened for user root by (uid=0)
+May 19 21:17:01 company-www CRON[2409239]: pam_unix(cron:session): session closed for user root
+May 19 21:20:01 company-www CRON[2409242]: pam_unix(cron:session): session opened for user smmsp by (uid=0)
+May 19 21:21:01 company-www CRON[2409242]: pam_unix(cron:session): session closed for user smmsp
+May 19 21:39:01 company-www CRON[2409269]: pam_unix(cron:session): session opened for user root by (uid=0)
+May 19 21:39:01 company-www CRON[2409269]: pam_unix(cron:session): session closed for user root
+May 19 21:40:01 company-www CRON[2409325]: pam_unix(cron:session): session opened for user smmsp by (uid=0)
+May 19 21:41:01 company-www CRON[2409325]: pam_unix(cron:session): session closed for user smmsp
+May 19 21:49:21 company-www sshd[2409353]: Accepted publickey for ubuntu from 10.0.0.1 port 63416 ssh2: ED25519 SHA256:bGFycnk0MDAwMjA5ODM0OTAyMzQ5ODIzNDkw
+May 19 21:49:21 company-www sshd[2409353]: pam_unix(sshd:session): session opened for user ubuntu by (uid=0)
+May 19 21:49:21 company-www systemd-logind[553]: New session 57228 of user ubuntu.
+May 19 21:49:22 company-www sshd[2409451]: Received disconnect from 10.0.0.1 port 63416:11: disconnected by user
+May 19 21:49:22 company-www sshd[2409451]: Disconnected from user ubuntu 10.0.0.1 port 63416
+May 19 21:49:22 company-www sshd[2409353]: pam_unix(sshd:session): session closed for user ubuntu
+May 19 21:49:22 company-www systemd-logind[553]: Session 57228 logged out. Waiting for processes to exit.
+May 19 21:49:22 company-www systemd-logind[553]: Removed session 57228.
+May 19 21:49:51 company-www sshd[2409464]: Accepted publickey for ubuntu from 10.0.0.1 port 63417 ssh2: ED25519 SHA256:bGFycnk0MDAwMjA5ODM0OTAyMzQ5ODIzNDkw
+May 19 21:49:51 company-www sshd[2409464]: pam_unix(sshd:session): session opened for user ubuntu by (uid=0)
+May 19 21:49:51 company-www systemd-logind[553]: New session 57229 of user ubuntu.
+May 19 21:49:51 company-www sshd[2409529]: Received disconnect from 10.0.0.1 port 63417:11: disconnected by user
+May 19 21:49:51 company-www sshd[2409529]: Disconnected from user ubuntu 10.0.0.1 port 63417
+May 19 21:49:51 company-www sshd[2409464]: pam_unix(sshd:session): session closed for user ubuntu
+May 19 21:49:51 company-www systemd-logind[553]: Session 57229 logged out. Waiting for processes to exit.
+May 19 21:49:51 company-www systemd-logind[553]: Removed session 57229.
+May 19 21:49:58 company-www sshd[2409531]: Accepted publickey for ubuntu from 10.0.0.1 port 63418 ssh2: ED25519 SHA256:bGFycnk0MDAwMjA5ODM0OTAyMzQ5ODIzNDkw
+May 19 21:49:58 company-www sshd[2409531]: pam_unix(sshd:session): session opened for user ubuntu by (uid=0)
+May 19 21:49:58 company-www systemd-logind[553]: New session 57230 of user ubuntu.
+May 19 21:49:59 company-www sshd[2409596]: Received disconnect from 10.0.0.1 port 63418:11: disconnected by user
+May 19 21:49:59 company-www sshd[2409596]: Disconnected from user ubuntu 10.0.0.1 port 63418
+May 19 21:49:59 company-www sshd[2409531]: pam_unix(sshd:session): session closed for user ubuntu
+May 19 21:49:59 company-www systemd-logind[553]: Session 57230 logged out. Waiting for processes to exit.
+May 19 21:49:59 company-www systemd-logind[553]: Removed session 57230.
+May 19 21:50:16 company-www sshd[2409598]: Accepted publickey for ubuntu from 10.0.0.1 port 63420 ssh2: ED25519 SHA256:bGFycnk0MDAwMjA5ODM0OTAyMzQ5ODIzNDkw
+May 19 21:50:16 company-www sshd[2409598]: pam_unix(sshd:session): session opened for user ubuntu by (uid=0)
+May 19 21:50:16 company-www systemd-logind[553]: New session 57231 of user ubuntu.

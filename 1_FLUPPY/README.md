@@ -113,9 +113,9 @@ Bring the `fluppy` dog to the fight.
 
 Here are some screenshots of fluppy in action (some information is totally contrived, and others have been redacted to protect the guilty).
 
-![alt text](image.png)
+![alt text](images/image.png)
 
-![alt text](image-1.png)
+![alt text](images/image-1.png)
 
 Also, `fluppy` defines alert thresholds and a cooldown period so as not to spam output constantly. 
 
@@ -142,15 +142,15 @@ $ python3 -m pip install PyYAML
 ```
 With `PyYAML` installed, `fluppy` should work for you to do some testing.
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 After you have downloaded the tool and configured a YAML file, running it is simple.
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
 Alternatively, the `-v` switch outputs more verbosely outputting recent lines matching the defined pattern.
 
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 ## Running fluppy
 
