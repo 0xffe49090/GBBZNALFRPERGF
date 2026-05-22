@@ -164,7 +164,7 @@ async def main():
         Runs automatically expecting a "config.yaml" local to this tool.
 
     '''
-    # argument processingm I want my own help here
+    # argument processing I want my own help here
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('-c', '--config', default='config.yaml')
     parser.add_argument('-v', '--verbose', action='store_true')
