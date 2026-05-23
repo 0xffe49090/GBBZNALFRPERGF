@@ -133,13 +133,15 @@ Currently, fluppy takes regular expressions which are then used to process logs 
 
 Most of `fluppy` is pure Python, but you need to install `PyYAML`. You can get this working via `pip3 install PyYAML`. 
 
->**Note** that on some distros and operating systems (like OSX), you might need a virtual environment as some systems won't let you "break system packages" any longer. If that sounds like you, or if you just want to do a virtual environment, you can follow these steps below.
+>**Note** In 2026, Python virtual environments are fairly standard practice. On some Linux distros and operating systems (like OSX), you might need a virtual environment to avoid breaking system packages. The suggested way forward is noted below. 
 
 ```        
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ python3 -m pip install PyYAML
+$ python3 fluppy.py -h
 ```
+
 With `PyYAML` installed, `fluppy` should work for you to do some testing.
 
 ![alt text](images/image-2.png)
