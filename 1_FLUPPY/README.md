@@ -131,32 +131,44 @@ Currently, fluppy takes regular expressions which are then used to process logs 
 
 ## Installation
 
+You have two options.
+
+1. Install `PyYAML` directly, then run `fluppy`.
+2. Install `PyYAML` in a virtual environment (see note below).
+
+**Option 1:**
+
 Most of `fluppy` is pure Python, but you need to install `PyYAML`. You can get this working via `pip3 install PyYAML`. 
 
+**Option 2:**
 >**Note** In 2026, Python virtual environments are fairly standard practice. On some Linux distros and operating systems (like OSX), you might need a virtual environment to avoid breaking system packages. The suggested way forward is noted below. 
 
 ```        
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ python3 -m pip install PyYAML
-$ python3 fluppy.py -h
+$ python3 fluppy.py -h        # (shows help)
 ```
-
-With `PyYAML` installed, `fluppy` should work for you to do some testing.
-
-![alt text](images/image-2.png)
-
-After you have downloaded the tool and configured a YAML file, running it is simple.
-
-![alt text](images/image-3.png)
-
-Alternatively, the `-v` switch outputs more verbosely outputting recent lines matching the defined pattern.
-
-![alt text](images/image-4.png)
 
 ## Running fluppy
 
-You will need to create a YAML file with your rules. Rules look like the example below. In the example below, there is a "tail", which is a live following of the `access.log`, and a "scan" mode which simply searches the contents of a `kern.log` within proximity of the fluppy tool. 
+With `PyYAML` installed, `fluppy` should work for you to do some testing. 
+
+`fluppy` currently has only 3 flags.
+
+Flag|Purpose
+----|-------
+--config, -c|Specify the YAML file to run. "config.yaml" is the default and `fluppy` will try that first.
+--verbose, -v|Print verbose output. Useful for seeing what rules `fluppy` matched.
+--help, -h|Print the standard usage/help.
+
+Thus, when you type `python3 fluppy.py -h`, you should get a screen similar to what is shown below.
+
+![alt text](images/image-2.png)
+
+You can start with the provided "config.yaml" file from this repo, but you will eventually want to modify the config to suit your needs. 
+
+Rules look like the example below. In the example below, there is a "tail", which is a live following of the `access.log`, and a "scan" mode which simply searches the contents of a `kern.log` within proximity of the fluppy tool. 
 
 ```yaml
   - path: /var/log/apache2/access.log
@@ -181,6 +193,15 @@ You will need to create a YAML file with your rules. Rules look like the example
 ```
 
 Essentially, create the stanzas that you want, add a regular expression, a file source, and run `fluppy`.
+
+After you have configured a YAML file, running it is simple.
+
+![alt text](images/image-3.png)
+
+Alternatively, the `-v` switch outputs more verbosely outputting recent lines matching the defined pattern.
+
+![alt text](images/image-4.png)
+
 
 Term|Purpose
 ---------|-------
