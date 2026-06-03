@@ -21,67 +21,48 @@ except Exception as e:
 
     sys.exit(1)
 
-# PLANNED
-# try:
-#     import yara
-# except:
-#     print("Missing Yara. Install yara --> `pip install yara-python`.")
-#     sys.exit(1)
 
-def pp(x, color='', strext=''):
+def pp(message, color='', suffix=''):
     '''
         Just a color hack. 
+
     '''
-    if platform.system() == "Windows":
-        os.system('color')
     colors = {
-            'r': f"\033[0;31m{x}\033[0m",
-            'g': f"\033[0;92m{x}\033[0m",
-            'b': f"\033[0;34m{x}\033[0m",
-            'c': f"\033[0;96m{x}\033[0m",
-            'm': f"\033[0;95m{x}\033[0m",
-            'y': f"\033[0;93m{x}\033[0m",
-            'k': f"\033[0;90m{x}\033[0m",
-            'critical': f"\033[0;95m{x}\033[0m",
-            'high': f"\033[0;31m{x}\033[0m",
-            'medium': f"\033[0;93m{x}\033[0m",
-            'low': f"\033[0;92m{x}\033[0m",
-            'info': f"\033[0;34m{x}\033[0m",
-            '': x
+        "r": "\033[0;31m",
+        "g": "\033[0;92m",
+        "b": "\033[0;34m",
+        "c": "\033[0;96m",
+        "m": "\033[0;95m",
+        "y": "\033[0;93m",
+        "k": "\033[0;90m",
+        "critical": "\033[0;95m",
+        "high": "\033[0;31m",
+        "medium": "\033[0;93m",
+        "low": "\033[0;92m",
+        "info": "\033[0;34m"
     }
-    try:
-        print(f'{colors[color]} {strext}')
-    except:
-        print(x)
-        pass
 
-def hilariousTmux(logfile):
-    import subprocess
-
-    cmd = (
-        f'tmux new-session -d -s fluppy "{sys.executable} {sys.argv[0]} --no-tmux"; '
-        f'tmux split-window -h -t fluppy "tail -f {logfile}"; '
-        f'tmux attach -t fluppy'
-    )
-
-    subprocess.run(cmd, shell=True)
+    reset = "\033[0m" if color else ""
+    
+    color = colors.get(color,"")
+    print(f"{color}{message}{reset} {suffix}")
 
 def writeJsonLog(jsondict, logfile="results.json"):
+    '''
+        Writes a json string to a logfile.
+
+    '''
     with open(logfile,"a") as f:
         f.write(f"{jsondict}\n")
 
-# async def watch(path: str, rules: list, outputlogfile="results.json", mode="tail", verbose=False):
+
 async def watch(path: str, rules: list, outputlogfile, mode="tail", verbose=False):
     '''
         The main function to watch the defined log files.
 
     '''
-    # check for the source file
-    # if not os.path.exists(path):
-    #     pp(f"[-] Log source not found {path}.","r")
-    #     return
-
-    if path == outputlogfile:
+    # ensure the user doesn't try to read and write the same file
+    if Path(path).resolve() == Path(outputlogfile).resolve():
         pp(f"[!] Cyclical read. Cannot monitor {path} as the output file. Ignoring that..","r")
         return
 
@@ -134,8 +115,8 @@ async def watch(path: str, rules: list, outputlogfile, mode="tail", verbose=Fals
 
                 # AI's suggested group matching
                 match = m.group(1) if m.lastindex else m.group(0)
-                
-                # little hack to compress extra spaces, this is our match
+               
+                # little hack to compress extra spaces; this is our match
                 hitval = " ".join(line.strip().split()) if verbose else match
 
                 # make a basic attempt to not put sensitive details
@@ -165,9 +146,10 @@ async def watch(path: str, rules: list, outputlogfile, mode="tail", verbose=Fals
                     if now - last >= cooldown:
                         event = f"[{severity.upper()}] {name} in {Path(path).name}: threshold {threshold} hit in {window} seconds."
                         pp(event,severity)
-                        logevent = {"event_id":now,"mode":mode,"alert":event,"match":hitval}
+                        logevent = {"event_id":now,"mode":mode,"alert":event,"match":hitval.strip()}
                         writeJsonLog(json.dumps(logevent),outputlogfile)
-                        print(f"  {hitval}")
+                        if verbose:
+                            print(f"  {hitval}")
                         last_alert[alert_key] = now
 
                     # reset 
@@ -182,14 +164,14 @@ async def watch(path: str, rules: list, outputlogfile, mode="tail", verbose=Fals
                     continue
 
                 # print the summarized results
-                #pp(f"[{severity.upper()}] {name} in {file}: {total} total hits; threshold {threshold}", severity)
                 event = f"[{severity.upper()}] {name} in {file}: {total} total hits; threshold {threshold}"
                 pp(event,severity)
 
                 # AI suggested improvement to counting
                 stack = []
                 for value, count in counts.most_common(10):
-                    print(f"  {value} [{count}]")
+                    if verbose:
+                        print(f"  {value} [{count}]")
                     stack.append(f"{value} [{count}/{total}]")
 
                 # option 1                
