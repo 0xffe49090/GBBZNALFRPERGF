@@ -59,8 +59,11 @@ Rules define:
 - regular expression patterns
 - thresholds
 - actions
+- redaction
 
 `fluppy` continuously watches configured files and evaluates incoming lines against defined rules in realtime. Optionally, it can alert on existing files that have already been written. 
+
+`fluppy` writes matches/events to `results.json` by default, but you can define what to write to via the `--output <filename.json>` flag.
 
 ### Technology Choices
 
@@ -124,7 +127,7 @@ Also, `fluppy` defines alert thresholds and a cooldown period so as not to spam 
 - Watch your firewall and your auth log at the same time
 - Monitor your super special custom binary for segfaults
 - Function like a cheap one-script IDS
-- Alert on secrets in files acting like a cheezy DLP
+- Alert on secrets in files acting like a cheezy DLP (and optionally redact them)
 - Hunt your proxy logs for sensitive details or flaws
 
 Currently, fluppy takes regular expressions which are then used to process logs (or really, any text file) for patterns. Examples include watching an Apache HTTP log for attacks, or monitoring a file for sensitive information. 
@@ -160,6 +163,7 @@ Flag|Purpose
 ----|-------
 --config, -c|Specify the YAML file to run. "config.yaml" is the default and `fluppy` will try that first.
 --verbose, -v|Print verbose output. Useful for seeing what rules `fluppy` matched.
+--output, -o|Specify a logfile to write to. Writes to `results.json` by default.
 --help, -h|Print the standard usage/help.
 
 Thus, when you type `python3 fluppy.py -h`, you should get a screen similar to what is shown below.
@@ -190,6 +194,17 @@ Rules look like the example below. In the example below, there is a "tail", whic
         cooldown: 300
         window: 1
         severity: critical
+
+  - path: log_samples/horrors.log
+    mode: scan
+    rules:
+      - name: credential_leak
+        regex: '((BEGIN PRIVATE|KEY=|jdbc|redis|passwd:|password|pwd|token|root.+@|AKIA|amex|visa).+)'
+        threshold: 1
+        cooldown: 300
+        window: 10
+        severity: critical
+        redact: True
 ```
 
 Essentially, create the stanzas that you want, add a regular expression, a file source, and run `fluppy`.
@@ -207,7 +222,17 @@ Term|Purpose
 ---------|-------
 path|This is the path to a file. It can be local to fluppy, or a full file path.
 mode|**tail**: Live following of a source file (like the Unix "tail" utility)</br>**scan**: Search an existing dead file for patterns. 
-rules|**name**: The rule name for your alert.<br/>**regex**: Configure the regular expression to search your files for. <br/>**cooldown**: The period of time in seconds that the tool should wait before alerting you again.<br/>**window**: The window of time that the tool should count events for. <br/>**threshold**: The number of events that should be counted within the **window**.<br/>**severity**: Currently expects severities like `critical`, `high`, `medium`, `low`, and `info`. These are used simply as color coding events streamed to the console. 
+rules|**name**: The rule name for your alert.<br/>**regex**: Configure the regular expression to search your files for. <br/>**cooldown**: The period of time in seconds that the tool should wait before alerting you again.<br/>**window**: The window of time that the tool should count events for. <br/>**threshold**: The number of events that should be counted within the **window**.<br/>**severity**: Currently expects severities like `critical`, `high`, `medium`, `low`, and `info`. These are used simply as color coding events streamed to the console.<br/>**redact**: Option to hide matches (e.g., passwords and such). Minimal effort! YMMV.
+
+## Processing results
+
+`fluppy` writes results to `results.json` by default. You can change its output log through the `--output` flag, alternatively. `fluppy` writes logs in JSONL format, and so tools such as `jq` will work swell. 
+
+![](images/results-jq.png)
+
+If you use the `--verbose` switch with `fluppy`, you will get more verbose events in your logs. At this time, it's doesn't go too crazy because well.. `fluppy` isn't meant to just "rewrite" logs after all. 
+
+
 
 ## About the name
 

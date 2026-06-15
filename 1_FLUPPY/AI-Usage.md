@@ -60,3 +60,17 @@ The `await asyncio.sleep(0.1)` is the key — when there's nothing to read, the 
 
 
 **Bottom line:** for watching N log files where N > a handful, asyncio gives you simpler code, lower memory, and no locking headaches compared to threads.
+
+---
+
+## Fluppy's Experimental UI
+
+I gave Claude the task to create a rudimentary status window for `fluppy`. I used the prompt below, and pasted in the existing `fluppy` code.
+
+>> What's a Pythonic way to keep a simple status/dashboard (even just text) all while outputting below? It'd be cool to have something like.. <br/><br/>[CRITICAL] credential_leak in horrors.log: 18 total hits; threshold 1<br/>[MEDIUM] http_attack in access.log: 231297 total hits; threshold 30<br/>.....<br/>(output scrolling here)
+
+Claude said:
+
+>> Use rich. It is the least-pain Python answer.
+
+Claude then produced what you can try out in `richfluppy.py`. I don't hate it, but I don't love it either. It moves a bit away from the really simple tool I wanted to create, and it added some underpinnings and probably other bugs I've not reviewed too closely. 
