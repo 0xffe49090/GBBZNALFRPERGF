@@ -226,6 +226,7 @@ if __name__ == '__main__':
         if len(set(members)) != len(members):
             raise SystemExit("Member names must be unique. I'm out!")
 
+        # Not really used anymore. 
         # the demo function - DO NOT USE THIS
         # hope you know what you're doing
         if args.foolishdemo:
@@ -234,51 +235,11 @@ if __name__ == '__main__':
 
         # generate shares
         if args.generate_shares:
-            # ditch this for real
             secret = getsecret()
-            pp(f"Generated a secret {secret.hex()}. Note that this is printed only for testing.","k")
+            # pp(f"Generated a secret {secret.hex()}. Note that this is printed only for testing.","k")
             print(f"The secret was generated and split into shares. To obtain the cleartext secret, you must provide the quorum {k} of {n} members.")
             blackbox(members, k, n, secret=secret)
 
         if args.recover_shares:
             recovered = clearbox(members, k)
             print(f"[+] Recovered secret {recovered.hex()}.")
-
-        # create secret and encrypted shares
-        ## pp("[*] Creating secret and generating encrypted shares.","y")
-        ##blackbox(members, k, n)
-
-        # secret = get_random_bytes(16)
-        
-        # m_count = len(members)
-        # shares = generateshares(secret, k, n)
-        # encrypted_shares = {}
-
-        # for member, share in zip(members, shares):
-        #     c = encryptshares(f"{member}-public.pem", share)
-        #     encrypted_shares[member] = c
-
-        #     # output junk
-        #     pp(member,"g")
-        #     pp(f"{c.hex()}","k")
-
-        # recover the secret
-        ##pp("[*] Attempting to recover the secret.","y")
-        ##recovered = clearbox(members, k)
-
-        # decrypted = []
-
-        # for member in members[:k]:
-        #     decrypted.append(
-        #         decryptshare(f"{member}-private.pem", encrypted_shares[member])
-        #     )
-
-        # recovered = Shamir.combine(decrypted)
-        
-        # This is just for demo.
-        # print("generated:", secret.hex())
-        # print("recovered:", recovered.hex())
-
-        # testing
-        ##print(recovered.hex())
-        
