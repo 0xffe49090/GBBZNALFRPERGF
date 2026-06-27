@@ -16,7 +16,7 @@ This system has the properties and goals:
 
 > Δ Variations on the concept are easy to imagine. Private key generation protected by passphrases inside of a sealed HSM, Argon2 for secrets, etc. The original idea is to provide *only* something "public" to get a slice back. 
 
-An ideal implementation would be key generation inside of a hardware security module, but for this example, we'll just do that in Docker and pretend. :)
+An ideal implementation would be key generation inside of a hardware security module, but for this example, just play along and use your imagination. :)
 
 ## Implementation
 
