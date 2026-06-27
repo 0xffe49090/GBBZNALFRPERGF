@@ -1,64 +1,109 @@
-import hashlib, argparse, os, platform, sys, json
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
-from cryptography.hazmat.primitives.serialization import load_pem_public_key
-from cryptography.hazmat.primitives.serialization import load_pem_private_key
-from cryptography.hazmat.primitives import hashes
-from Crypto.Protocol.SecretSharing import Shamir
-from Crypto.Random import get_random_bytes
+import argparse, os, platform, sys
+from pathlib import Path
 
-'''
-    1. Create the secret.
-    2. Carve up the secret into shares.
-    3. Return encrypted shares.
-    4. Recombine the shares based on the threshold.
-    5. Output the secret.
-'''
+# try to be helpful for missing libs
+try:
+    from cryptography.hazmat.primitives.asymmetric import rsa, padding
+    from cryptography.hazmat.primitives.serialization import load_pem_public_key
+    from cryptography.hazmat.primitives.serialization import load_pem_private_key
+    from cryptography.hazmat.primitives import hashes
+    from Crypto.Protocol.SecretSharing import Shamir
+    from Crypto.Random import get_random_bytes
+except ImportError as e:
+    sys.exit(
+        f"Missing dependencies. Options:\n\n"
+        "1) pip install cryptography pycryptodome\n"
+        "2) python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && python3 kasumi.py -h\n" 
+    )
 
+
+# define the default location for encrypted shares to live
+SHARE_DIR = Path("shares")
+
+# just a quick color hack
 def pp(x, color='', strext=''):
-    '''
-        PrettyPrint. Just a color hack. 
-        I know there are multiple color libs. Do not want.
-
-    '''
     if platform.system() == "Windows":
         os.system('color')
+
     colors = {
-            'r': f"\033[0;31m{x}\033[0m",
-            'g': f"\033[0;92m{x}\033[0m",
-            'b': f"\033[0;34m{x}\033[0m",
-            'c': f"\033[0;96m{x}\033[0m",
-            'm': f"\033[0;95m{x}\033[0m",
-            'y': f"\033[0;93m{x}\033[0m",
-            'k': f"\033[0;90m{x}\033[0m",
-            '': x
+        'r': f"\033[0;31m{x}\033[0m",
+        'g': f"\033[0;92m{x}\033[0m",
+        'b': f"\033[0;34m{x}\033[0m",
+        'c': f"\033[0;96m{x}\033[0m",
+        'm': f"\033[0;95m{x}\033[0m",
+        'y': f"\033[0;93m{x}\033[0m",
+        'k': f"\033[0;90m{x}\033[0m",
+        '': x
     }
+
     try:
         print(f'{colors[color]} {strext}')
-    except:
+    except Exception:
         print(x)
-        pass
 
-def generateshares(secret,k,n):
-    '''
-     Takes a secret and splits that secret into shares.
-     Retuns an array of tuples, e.g.
-       [(1,b"stuff"),(2,"more stuff")]
 
+
+def load_members_from_keydir(keydir, suffix):
     '''
-    # split the secret into shares
-    shares = Shamir.split(k, n, secret)
-    return shares
+        This function does some sanity checks for where
+        key files and/or key directories are at.
+    '''
+    keydir = Path(keydir)
+
+    if not keydir.is_dir():
+        raise SystemExit(f"Key directory not found: {keydir}")
+
+    members = []
+    key_paths = {}
+
+    for pem in sorted(keydir.glob(f"*{suffix}.pem")):
+        member = pem.stem.removesuffix(suffix)
+
+        if member in key_paths:
+            raise SystemExit(f"Duplicate member detected: {member}")
+
+        members.append(member)
+        key_paths[member] = pem
+
+    if not members:
+        raise SystemExit(f"No *{suffix}.pem files found in {keydir}")
+
+    return members, key_paths
+
+
+def parse_members(member_csv):
+    '''
+        Parses a common-separated list of members in the case 
+        where users provide 'dave,alice,bob', for example.    
+    '''
+    members = [m.strip() for m in member_csv.split(',') if m.strip()]
+
+    if not members:
+        raise SystemExit("No valid members supplied.")
+
+    if len(set(members)) != len(members):
+        raise SystemExit("Member names must be unique. I'm out!")
+
+    return members
+
+
+def generateshares(secret, k, n):
+    '''
+        Generate shares k(n) according to Shamir's algorithm. 
+    '''
+    return Shamir.split(k, n, secret)
+
 
 def decryptshare(privkey, ciphertext):
     '''
-        Take a private key, and the encrypted share.
-        Return decrypted share.
+        Decrypt encrypted shares. 
     '''
     with open(privkey, "rb") as f:
         try:
             private_key = load_pem_private_key(f.read(), password=None)
-        except:
-            raise SystemExit(f"Public key {privkey} not found. ")
+        except Exception:
+            raise SystemExit(f"Private key {privkey} not found or invalid.")
+
     try:
         payload = private_key.decrypt(
             ciphertext,
@@ -68,30 +113,29 @@ def decryptshare(privkey, ciphertext):
                 label=None,
             ),
         )
-    except:
-        raise SystemExit(f"Decryption failed with key {privkey}. Likely invalid quorom member.")
+    except Exception:
+        raise SystemExit(f"Decryption failed with key {privkey}. Likely invalid quorum member.")
 
     idx = int.from_bytes(payload[:2], "big")
     share_bytes = payload[2:]
 
-    return (idx, share_bytes)
+    return idx, share_bytes
+
 
 def encryptshares(pubkey, share):
-    ''' 
-        Takes a public key and share of the secret.
-        Returns an encrypted share. 
-
+    '''
+        Encrypt/produce shares according to supplied member public keys.
     '''
     with open(pubkey, "rb") as f:
         try:
             public_key = load_pem_public_key(f.read())
-        except:
-            raise SystemExit(f"Public key {pubkey} not found. ")
+        except Exception:
+            raise SystemExit(f"Public key {pubkey} not found or invalid.")
 
     idx, share_bytes = share
     payload = idx.to_bytes(2, "big") + share_bytes
-    
-    ciphertext = public_key.encrypt(
+
+    return public_key.encrypt(
         payload,
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -100,146 +144,182 @@ def encryptshares(pubkey, share):
         ),
     )
 
-    return ciphertext
 
 def getsecret():
-    secret = get_random_bytes(16)
-    return secret
-
-def blackbox(members, k, n, secret=None):
     '''
-        In an ideal world, this would live in an HSM. 
-        - Generate a secret.
-        - Carve the secret into encrypted shares for each member of the quorum.
-        - Write the shares to JSON files.
-
+        Just a secret generator. Obviously this could be anything. 
     '''
+    return get_random_bytes(16)
 
-    # just default to generating a secret
+
+def blackbox(members, k, n, secret=None, key_paths=None):
+    '''
+        The intention here is to enulate a "blackbox" of sorts.
+
+        This function takes a list of members and the quorum recipe 
+        and produces shares for each supplied member.
+    '''
     if secret is None:
         secret = get_random_bytes(16)
-    
-    m_count = len(members)
+
     shares = generateshares(secret, k, n)
-    encrypted_shares = {}
+    SHARE_DIR.mkdir(exist_ok=True)
 
     for member, share in zip(members, shares):
-        c = encryptshares(f"{member}-public.pem", share)
-        encrypted_shares[member] = c
+        pubkey = key_paths[member] if key_paths else f"{member}-public.pem"
+        ciphertext = encryptshares(pubkey, share)
 
-        pp(f" - Writing share for {member}.","g")
-        with open(f"{member}-share","w") as f:
-            f.write(c.hex())
+        share_file = Path(f"{SHARE_DIR}/{member}.share")
+
+        pp(f" - Writing share for {member}: {share_file}", "g")
+        with open(share_file, "w") as f:
+            f.write(ciphertext.hex())
 
 
-def clearbox(members, k):
+def clearbox(members, k, key_paths=None):
     '''
-        In an idea world, unseal protected invisible secrets (e.g., in an HSM).
-        - Collect the JSON files.
-        - Recombine the encrypted secrets.
-        - Output the secret (or keep it internal for the system to operate on).
-
+        This function decrypts encrypted shares for each member in the
+        supplied quorum.
     '''
-    # recover the secret
     decrypted = []
 
-    try:
-        for member in members[:k]:
-            with open(f"{member}-share") as f:
-                encryptshare = bytes.fromhex(f.read())
-            decrypted.append(
-                decryptshare(f"{member}-private.pem", encryptshare)
-            )
-    except:
-        raise SystemExit(f"Failed to decrypt using member {member}.")
+    for member in members[:k]:
+        share_file = Path(f"{SHARE_DIR}/{member}.share")
+        print(share_file)
+
+        if not share_file.exists():
+            pp("[-] Be sure you have '.share' files created for each member in the quorum.","y")
+            raise SystemExit(f"Share file not found: {share_file}")
+
+        with open(share_file) as f:
+            encrypted_share = bytes.fromhex(f.read().strip())
+
+        privkey = key_paths[member] if key_paths else Path(f"{member}-private.pem")
+        decrypted.append(decryptshare(privkey, encrypted_share))
 
     return Shamir.combine(decrypted)
 
-def foolishdemo(members, k, n):
-    secret = getsecret()
-    pp("-- FOOLISH DEMO MODE DO NOT USE --","r")
-    pp("[*] Creating secret and generating encrypted shares.","y")
-    pp(f"[*] The demo secret is {secret.hex()}.")
-    blackbox(members, k, n, secret)
-    pp("[*] Attempting to recover the secret.","y")
-    recovered = clearbox(members, k)
-    print(f"[+] Recovered demo secret is {recovered.hex()}.")
-    
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('-m', '--members', help="Comma delimted list of member keys. --members 1,2,3,4.")
-    parser.add_argument('-g', '--generate-shares', action='store_true', help="Generates encrypted shares by members. Requires public keys, 1-public.pem, 2-public.pem, etc.")
-    parser.add_argument('-r', '--recover-shares', action='store_true',  help="Recover shares. Needs member named 'share' files, 1-share, 2-share, and associated member private keys.")
-    parser.add_argument("-k", "--threshold", type=int, help="Number of shares required to recover secret.")
-    parser.add_argument("-f", "--foolishdemo", action='store_true', help="DO NOT USE THIS. Demonstrates the tool. Not useful in the real world.")
-    parser.add_argument('-h', '--help', action='store_true')
-
-    # sweet banner
+    # banner/help info 
     banner = '''
      __                               __
     |  |--.---.-.-----.--.--.--------|__|
     |    <|  _  |__ --|  |  |        |  |
     |__|__|___._|_____|_____|__|__|__|__|
-  
-    Kasumi generates (and recovers) a secret based on a supplied list of public keys of a quorum.
 
-    1. Get members you want to involve.
-    2. Everyone generates a key pair.
-    3. Members supply their public keys.
-    4. System generates a secret.
-    5. Each member gets a share of the secret.
+    Kasumi generates and recovers a secret based on supplied quorum member keys.
 
-    $ python3 ./kasumi.py -m alice,bob,mallory,oscar,dave -k 2
+    TESTING THIS TOOL
+    
+    To get the idea of how this might work, here's a suggested process. 
 
+     1. Run the sample "generate_sample_keys.sh"
+     2. Generate shares.
+        $ python3 kasumi.py -d keys -k 3 -g
+     3. Recover shares and obtain the secret.
+        $ python3 kasumi.py -d keys -k 3 -r 
+
+    KEYDIR mode: Provide a directory of keys. 
+
+      keys/alice-public.pem
+      keys/alice-private.pem
+      keys/bob-public.pem
+      keys/bob-private.pem
+
+      python3 kasumi.py -d keys -k 3 -g.  --> GENERATE shares
+      python3 kasumi.py -d keys -k 3 -r   --> RECOVER shares
+
+    LIST mode: Simply provide a list of members. 
+      Keys are assumed to be local to this tool and named "alice-public.pem", "alice-private.pem", etc.
+
+      $ python3 kasumi.py -m alice,bob,dave -k 3 -g
+      $ python3 kasumi.py -m alice,bob,dave -k 3 -r
+
+    SHARES are written to and read from "shares" by default. 
+
+      shares/alice.share
+      shares/bob.share
     '''
+
+    # arg parsing junk painful because I just have to be difficult
+    # with my silly banner
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("-h", "--help", action="store_true")
+    parser.add_argument('-m', '--members', help="CSV mode: alice,bob,dave")
+    parser.add_argument('-d', '--keydir', help="DIR mode: directory containing member keys.")
+    omode = parser.add_mutually_exclusive_group()
+    omode.add_argument('-g', '--generate-shares', action='store_true', help="Generate encrypted shares.")
+    omode.add_argument('-r', '--recover-shares', action='store_true', help="Recover shares.")
+    parser.add_argument("-k", "--threshold", type=int, help="Number of shares required to recover secret.")
 
     args = parser.parse_args()
 
-    # bail on help 
+    # finally, show the help if the users wants it
     if args.help:
-         pp(banner,'g')
-         parser.print_help()
-         print('\n')
-         sys.exit(0)
-    
-    # go for it
+        pp(banner, "g")
+        parser.print_help()
+        print()
+        sys.exit(0)
+
+
+    # get to work, set k for k(n) defining number of member necessary for quorum
+    k = args.threshold
+
+    if k < 2:
+        raise SystemExit("Quorum must be at least 2. Exiting!")
+
+    # check for private and public key files
+    suffix = "-private" if args.recover_shares else "-public"
+
+    # most of this is logic for ensuring that member keys exist
     if args.members:
-        if "," in args.members:
-            md = {}
-            members = args.members.split(',') # read args into a list
+        members = parse_members(args.members)
+        key_paths = {}
+        # the user provided a directory of keys
+        if args.keydir:
+            keydir = Path(args.keydir)
+            if not keydir.exists():
+                pp("[!] Check your directory name and ensure keys are present within.","r")
+                raise SystemExit(f"Invalid key directory '{keydir}'. Exiting.")
+            key_paths = {
+                member: keydir / f"{member}{suffix}.pem"
+                for member in members
+            }
+        # the user provide a list of members, e.g., alice,bob,larry
+        else:
+            for member in members:
+                p = Path(f"{member}{suffix}.pem")
+                if not p.exists():
+                    pp(f'[-] No such member key {member}{suffix}.pem. Check that the file exists, or use the -d switch to provide a directory of keys.','y')
+                else:
+                    key_paths = {
+                        member: Path(f"{member}{suffix}.pem")
+                        for member in members
+                    }
+            # Punt if there is a short
+            if len(key_paths) < k:
+                pp("[-] Failure to locate keys.","r")
+                raise SystemExit(f"Not enough keys were provided for quorum of '{k}'. Ensure that you have provided key files local to this tool to in a directory containing keys.")
+    elif args.keydir:
+        members, key_paths = load_members_from_keydir(args.keydir, suffix)
+    else:
+        raise SystemExit("Provide -d keys and/or members list (e.g., -m alice,bob,dave).")
 
-        # just the k(n) for clarity
-        n = len(members)
-        k = args.threshold
+    # our members in the quorum
+    n = len(members)
 
-        # Sanity checks
-        if not args.threshold:
-            raise SystemExit("Quorum threshold is a required value. (e.g., -k 2)")
-        
-        if k < 2:
-            raise SystemExit("Quorum must be at least 2. Exiting!")
+    # sanity check
+    if k > n:
+        raise SystemExit(f"Threshold cannot be more than there are members. Threshold is {k}, members is {n}. Exiting!")
 
-        if k > n:
-            raise SystemExit(f"Threshold cannot be more than there are members! Threshold is {k}, members is {n}. Exiting!")
+    # generate some shares!
+    if args.generate_shares:
+        secret = getsecret()
+        print(f"The secret was generated and split into shares. To recover it, provide a quorum of {k} of {n} members.")
+        blackbox(members, k, n, secret=secret, key_paths=key_paths)
 
-        if len(set(members)) != len(members):
-            raise SystemExit("Member names must be unique. I'm out!")
-
-        # Not really used anymore. 
-        # the demo function - DO NOT USE THIS
-        # hope you know what you're doing
-        if args.foolishdemo:
-            foolishdemo(members, k, n)
-            sys.exit()
-
-        # generate shares
-        if args.generate_shares:
-            secret = getsecret()
-            # pp(f"Generated a secret {secret.hex()}. Note that this is printed only for testing.","k")
-            print(f"The secret was generated and split into shares. To obtain the cleartext secret, you must provide the quorum {k} of {n} members.")
-            blackbox(members, k, n, secret=secret)
-
-        if args.recover_shares:
-            recovered = clearbox(members, k)
-            print(f"[+] Recovered secret {recovered.hex()}.")
+    # recover some shares!
+    if args.recover_shares:
+        recovered = clearbox(members, k, key_paths)
+        print(f"[+] Recovered secret {recovered.hex()}.")
