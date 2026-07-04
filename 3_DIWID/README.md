@@ -32,26 +32,43 @@ Sample binaries from CTFs were used as input to Binary Ninja along with this plu
 
 **There are currently two options.**
 
-1. The Binary Ninja Plugin that requires s licensed (PAID) version of Binary Ninja.
+1. The Binary Ninja Plugin that requires a licensed (PAID) version of Binary Ninja.
 2. The standalone Python script that produces an HTML file of similar output.
 
-### Binary Ninja Plugin
+### Option 1. Binary Ninja Plugin
 
-0. Install [Binary Ninja](https://binary.ninja/free/) for your OS.
-1. Clone the Git repo.
-2. Copy the **entire DIWID folder** into your Binary Ninja plugins folder (e.g., `~/Library/Application Support/Binary Ninja/plugins/diwid` on OSX). See "Notes" below.
-3. Navigate over to `Plugins >  DIWID > Analyze Functions`.
+1. Install [Binary Ninja](https://binary.ninja/free/) for your OS. Again, you must have a paid license of Binary Ninja.
+2. Clone the Git repo.
+
+```bash
+➜  git clone https://github.com/0xffe49090/GBBZNALFRPERGF
+Cloning into 'GBBZNALFRPERGF'...
+```
+
+3. Change directories into the `3_DIWID` folder. 
+
+```
+➜  cd GBBZNALFRPERGF/3_DIWID
+```
+
+4. Copy the **entire DIWID folder** into your Binary Ninja plugins folder (e.g., `~/Library/Application Support/Binary Ninja/plugins/diwid` on OSX). See "Notes" below for your OS.
+
+```bash
+➜  3_DIWID git:(main) cp -r diwid_binaryninja ~/Library/Application\ Support/Binary\ Ninja/plugins
+```
+
+4. Start up Binary Ninja. 
+5. Navigate over to `Plugins >  DIWID > Analyze Functions`.
 
 ![](_assets/README.md-20260704.png)
 
-4. Review the output in the log.
+6. Review the output in the log.
 
 ![](_assets/README.md-20260704-1.png)
 
-5. Check the colorized output noting interesting and potentially suspect functions for review. The screenshot below shows a blue-green color assigned to functions like `puts` and `putchar` for example. 
+7. Check the colorized output noting interesting and potentially suspect functions for review. The screenshot below shows a blue-green color assigned to functions like `puts` and `putchar` for example. 
 
 ![](_assets/README.md-20260704-2.png)
-
 
 **Notes**
 
@@ -64,7 +81,7 @@ Taken straight from the above reference, put the plugin in the appropriate folde
 - Windows: `%APPDATA%\Binary Ninja\plugins`
 
 
-### Standalone  Version
+### Option 2. Standalone  Version
 
 If you do not have a licensed (aka "PAID") version of Binary Ninja, the only option in this repo is the standalone version. It merely produces a color-coded mapping and scoring of identified functions. I
 
