@@ -1,0 +1,12 @@
+{
+  "pluginmetadataversion": 2,
+  "name": "diwid",
+  "type": ["helper", "ui"],
+  "api": ["python3"],
+  "description": "Scores and highlights interesting functions.",
+  "author": "daveg",
+  "version": "0.1",
+  "license": {
+    "name": "MIT"
+  }
+}
