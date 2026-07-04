@@ -137,3 +137,5 @@ I started by reading the documentation and through testing a few basic ideas wit
 - https://github.com/Vector35/sample_plugin (Binary Ninja Sample Plugin from Vector35)
 
 Upon getting the hang of how development and plugins are implemented, I used AI as a development assistance to come up with the bones of the software. I modified and changed various sections for my own desired formatting, and reviewed and tested the code.
+
+The "diwid_standalone.py" is almost entirely AI generated (however was based on the Binary Ninja plugin code) as a necessity to support unlicensed Binary Ninja installations. It was tested and reviewed and it's not that complicated. 
