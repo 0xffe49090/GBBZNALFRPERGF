@@ -83,7 +83,9 @@ Taken straight from the above reference, put the plugin in the appropriate folde
 
 ### Option 2. Standalone  Version
 
-If you do not have a licensed (aka "PAID") version of Binary Ninja, the only option in this repo is the standalone version. It merely produces a color-coded mapping and scoring of identified functions. I
+If you do not have a licensed (aka "PAID") version of Binary Ninja, the only option in this repo is the standalone version. It merely produces a color-coded mapping and scoring of identified functions. 
+
+Make sure you have `readelf` and `objdump`, etc. Do a `sudo apt update && sudo apt install binutils` if you are unsure.
 
 1. Clone the repo. 
 2. Run the standalone `diwid_standalone.py` version against the sample binary.
