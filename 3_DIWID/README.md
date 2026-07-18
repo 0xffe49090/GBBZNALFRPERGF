@@ -97,8 +97,8 @@ I strongly recommend that you start by cloning the radare2 latest and then build
 
 ```
 $ git clone https://github.com/radareorg/radare2
-# cd radare2
-# sys/install.sh
+$ cd radare2
+$ sys/install.sh
 ```
 Next, make sure you have `readelf` and `objdump`, etc. 
 
