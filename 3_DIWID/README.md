@@ -2,7 +2,10 @@
 
 DIWID is a Binary Ninja plugin to help reverse engineers *Discover Interesting, Weird, and Important Data*. 
 
-> NOTE: The primary implementation is a Binary Ninja plugin. Because Binary Ninja Free does not support plugins, a lightweight Linux ELF standalone reporter is included so reviewers can evaluate DIWID’s scoring model without commercial tooling. This is obviously less cool, but it's not entirely useless.
+> NOTE: The primary implementation is a Binary Ninja plugin. Because Binary Ninja Free does not support plugins, a lightweight Linux ELF standalone reporter is included so reviewers can evaluate DIWID’s scoring model without commercial tooling. It leverages  [radare2](https://github.com/radareorg/radare2) framework under the hood which makes it interesting on its own. 
+
+- Binary NInja version - Tested on Linux and OSX
+- Standalone version - Tested on Linux only
 
 ## Problem 
 
@@ -83,28 +86,69 @@ Taken straight from the above reference, put the plugin in the appropriate folde
 
 ### Option 2. Standalone  Version
 
-If you do not have a licensed (aka "PAID") version of Binary Ninja, the only option in this repo is the standalone version. It merely produces a color-coded mapping and scoring of identified functions. 
+If you do not have a licensed (aka "PAID") version of Binary Ninja, the only option in this repo is the standalone version. It merely produces a color-coded mapping and scoring of identified functions. This standalone version uses the very awesome [radare2](https://github.com/radareorg/radare2) to discover functions, imports, xrefs, etc.
 
-Make sure you have `readelf` and `objdump`, etc. Do a `sudo apt update && sudo apt install binutils` if you are unsure.
+**Requirements:**
+
+- radare2
+- binutils
+
+I strongly recommend that you start by cloning the radare2 latest and then building it yourself. It's fairly quick and easy.
+
+```
+$ git clone https://github.com/radareorg/radare2
+# cd radare2
+# sys/install.sh
+```
+Next, make sure you have `readelf` and `objdump`, etc. 
+
+```
+$ sudo apt update && sudo apt install binutils
+```
+
+**Get started with the standalone version**
+
+Now with the requirements out of the way, get started. 
 
 1. Clone the repo. 
 2. Run the standalone `diwid_standalone.py` version against the sample binary.
 
 ```
-$] python3 diwid_standalone.py -o diwid.html rofl.bin
-Score  Function                 Address
-----------------------------------------------------------
-   16  heap_bug                 0x401311
-       0x401326       heap                   malloc (+2)
-       0x401334       heap                   malloc (+2)
-       0x401355       output                 puts (+1)
-       0x401372       memory_unsafe          strcpy (+3)
-...
+$] python3 diwid_standalone.py sample.bin -o diwid.html --json diwid.json --debug
+[debug] discovered functions : 47
+[debug] imports              : 15
+[debug] flags                : 187
+[debug] import targets       : 43
+[debug] classified imports  : 33
+[debug] matching xrefs       : 79
+[debug] classified callsites : 34
+[debug] interesting functions: 8
+DIWID Standalone 0.3.0
+Binary: sample.bin
+Functions: 47 discovered, 8 interesting
+Calls: 79/79 resolved, 34 classified
+
+Score  Address         Function                          Findings
+------------------------------------------------------------------
+   16  0x401311        dbg.heap_bug                      9
+       0x401399        heap                     free (+2)
+       0x4013c0        heap                     free (+2)
+       0x401372        memory_unsafe            strcpy (+3)
+       0x401355        output                   puts (+1)
+       0x401326        heap                     malloc (+2)
+       0x401334        heap                     malloc (+2)
+
+   12  0x401437        dbg.struct_bug                    6
+       0x4014e4        heap                     free (+2)
+       0x401492        memory_unsafe            strcpy (+3)
+       0x4014a9        memory_unsafe            strcpy (+3)
+       0x40146a        output                   puts (+1)
+..
 ```
 
 3. Look at the generated HTML report. From the command above, the resulting `diwid.html` file is opened in a web browser to produce output similar to the following.
 
-![](_assets/README-20260704.png)
+![](_assets/README-20260717.png)
 
 ### Colorization and Ratings
 
@@ -138,4 +182,4 @@ I started by reading the documentation and through testing a few basic ideas wit
 
 Upon getting the hang of how development and plugins are implemented, I used AI as a development assistance to come up with the bones of the software. I modified and changed various sections for my own desired formatting, and reviewed and tested the code.
 
-The "diwid_standalone.py" is almost entirely AI generated (however was based on the Binary Ninja plugin code) as a necessity to support unlicensed Binary Ninja installations. It was tested and reviewed and it's not that complicated. 
+The "diwid_standalone.py" is almost entirely AI generated (however was based on the Binary Ninja plugin code) as a necessity to support unlicensed Binary Ninja installations. It was tested and reviewed and it's not that complicated.  The latest iteration leverage radare2/r2pipe to do a bit more advanced scoring.
