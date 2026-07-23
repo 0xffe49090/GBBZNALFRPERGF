@@ -1,7 +1,280 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Uncruft Tests</title></head><body>
-<h1>Uncruft test links</h1>
-<p><a target="_blank" href="https://example.com/article?id=42&amp;utm_source=chatgpt.com&amp;utm_medium=referral">UTM test</a> → https://example.com/article?id=42</p>
-<p><a target="_blank" href="https://example.org/test?fbclid=abc&amp;gclid=xyz&amp;page=2">Click-ID test</a> → https://example.org/test?page=2</p>
-<p><a target="_blank" href="https://www.amazon.com/stores/Oura/page/9F826A80-FD70-4B6A-A1B9-188DAF83750A/?_encoding=UTF8&amp;ref_=pd_hp_d_r_atf_unk&amp;pd_rd_w=qs2nj&amp;content-id=amzn1.sym.test&amp;pd_rd_wg=Y95aI&amp;pd_rd_r=test">Amazon test</a> → clean store path</p>
-<p><a target="_blank" href="https://example.net/search?q=security&amp;page=3&amp;id=123">Negative control</a> → unchanged</p>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URL Smoke Test Suite</title>
+
+  <style>
+    body {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      font-family: system-ui, sans-serif;
+      line-height: 1.5;
+    }
+
+    .test {
+      margin-bottom: 24px;
+      padding: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .test h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+
+    code {
+      overflow-wrap: anywhere;
+    }
+
+    .expected {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>URL Smoke Test Suite</h1>
+
+  <p>
+    Each link opens in a new tab. After navigation, compare the resulting
+    address-bar URL with the expected cleaned URL shown below it.
+  </p>
+
+  <section class="test">
+    <h2>1. Basic UTM removal</h2>
+
+    <p>
+      Removes <code>utm_source</code> and <code>utm_medium</code>, while
+      retaining the functional <code>id</code> parameter.
+    </p>
+
+    <p>
+      <a
+        href="https://example.com/article?id=42&amp;utm_source=chatgpt.com&amp;utm_medium=referral"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open basic UTM test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.com/article?id=42</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>2. Advertising click identifiers</h2>
+
+    <p>
+      Removes the Facebook <code>fbclid</code> and Google
+      <code>gclid</code> identifiers, while preserving <code>page=2</code>.
+    </p>
+
+    <p>
+      <a
+        href="https://example.org/test?fbclid=abc123&amp;gclid=xyz789&amp;page=2"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open click-ID test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.org/test?page=2</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>3. Tracking parameters mixed with functional data</h2>
+
+    <p>
+      Removes <code>utm_campaign</code> and <code>utm_content</code>, while
+      retaining the unknown functional parameter <code>token</code>.
+    </p>
+
+    <p>
+      <a
+        href="https://example.net/report?utm_campaign=phd-test&amp;utm_content=button&amp;token=keep-me"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open mixed-parameter test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.net/report?token=keep-me</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>4. Mailchimp tracking parameters</h2>
+
+    <p>
+      Removes <code>mc_cid</code> and <code>mc_eid</code>. The generic
+      <code>ref</code> parameter should remain because it is not globally
+      removed by the default configuration.
+    </p>
+
+    <p>
+      <a
+        href="https://example.com/?mc_cid=1234&amp;mc_eid=5678&amp;ref=keep-me"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open Mailchimp test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.com/?ref=keep-me</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>5. Repeated tracking parameter</h2>
+
+    <p>
+      Tests whether every occurrence of a repeated
+      <code>utm_source</code> parameter is removed while preserving
+      <code>id=99</code>.
+    </p>
+
+    <p>
+      <a
+        href="https://example.org/path?utm_source=one&amp;utm_source=two&amp;id=99"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open repeated-parameter test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.org/path?id=99</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>6. Encoded value and URL fragment</h2>
+
+    <p>
+      Removes <code>utm_source</code>, while preserving the encoded search
+      value and the <code>#section-2</code> fragment.
+    </p>
+
+    <p>
+      <a
+        href="https://example.net/docs?utm_source=chatgpt.com&amp;q=hello%20world#section-2"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open encoding and fragment test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.net/docs?q=hello%20world#section-2</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>7. Negative control</h2>
+
+    <p>
+      Contains no configured tracking parameters. The extension should leave
+      the URL unchanged.
+    </p>
+
+    <p>
+      <a
+        href="https://example.com/search?q=security&amp;page=3&amp;id=123"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open unchanged control test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.com/search?q=security&amp;page=3&amp;id=123</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>8. YouTube domain-specific rule</h2>
+
+    <p>
+      Tests the bundled domain-specific rules. It should preserve the video
+      identifier in <code>v</code>, while removing <code>si</code> and
+      <code>feature</code>.
+    </p>
+
+    <p>
+      <a
+        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&amp;si=fake-tracking-value&amp;feature=shared"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open YouTube domain-rule test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://www.youtube.com/watch?v=dQw4w9WgXcQ</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>9. Large mixed tracking set</h2>
+
+    <p>
+      Exercises several independent tracking families in one request. Only
+      <code>id</code> and <code>mode</code> should survive.
+    </p>
+
+    <p>
+      <a
+        href="https://example.com/demo?id=123&amp;mode=test&amp;utm_source=chatgpt.com&amp;utm_campaign=phd&amp;fbclid=fake&amp;gclid=fake&amp;mc_cid=fake&amp;msclkid=fake"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open large mixed-set test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.com/demo?id=123&amp;mode=test</code>
+    </div>
+  </section>
+
+  <section class="test">
+    <h2>10. Tracking-only query string</h2>
+
+    <p>
+      Every parameter is removable. The resulting URL should have no query
+      string and should not retain a trailing question mark.
+    </p>
+
+    <p>
+      <a
+        href="https://example.org/?utm_source=chatgpt.com&amp;fbclid=fake&amp;gclid=fake"
+        target="_blank"
+        rel="noopener noreferrer">
+        Open tracking-only test
+      </a>
+    </p>
+
+    <div class="expected">
+      <strong>Expected:</strong><br>
+      <code>https://example.org/</code>
+    </div>
+  </section>
+</body>
+</html>
