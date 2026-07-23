@@ -2,11 +2,19 @@
 
 Uncruftify your URLs! 
 
+**Quick start:**
+
+1. Download the zip (Chrome or Firefox).
+   1. [Chrome](assets/https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/uncruft-chromium-1.0.0.zip)
+   2. [Firefox](assets/https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/uncruft-firefox-1.0.0.zip)
+2. Unzip it.
+3. Install the extension.
+
 ## Problem Definition  
 
-The problem is simple. Too many things track you around the web. Lots of privacy browser extensions exist, but perhaps there is still room for straightforward tracking stripping tools like this one. 
+**The problem is simple. Too many things track you around the web.** Lots of privacy browser extensions exist, but perhaps there is still room for straightforward tracking stripping tools like this one. 
 
-Examples of bad:
+Examples that are not great for your privacy:
 
 - Multiple chained adtech redirect trackers.
 - ChatGPT leaks your vibes with its `utm_source=chatgpt.com` URL appends.
@@ -17,7 +25,7 @@ Examples of bad:
 
 This is a browser extension for Chrome, Vivaldi, and Firefox. It might work on other browsers as well. Generally, it strips tracking junk from URLs to enable you to not be plopped into an adtech ecosystem quite so easily.
 
-This tool ALSO MAKES AN ATTEMPT to protect you by NOT sharing session tokens. Sessions were never meant for URLs. Keep that to yourself like a respectable human.
+This tool also makes an attempt to protect you by NOT sharing URI-bound session tokens. Sessions were never meant for URLs. Keep sessions to yourself like a respectable human.
 
 **Why is this important?**
 
@@ -65,11 +73,11 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
     So, in pictures.
 
-    ![alt text](image.png)
+    ![alt text](assets/image.png)
 
     Pin the extension if you want to.
 
-    ![alt text](image-1.png)
+    ![alt text](assets/image-1.png)
 
 **Firefox** 
 
@@ -79,40 +87,36 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
 Likewise.
 
-![alt text](image-2.png)
+![alt text](assets/image-2.png)
 
 Select the "manifest.json" file. 
 
-![alt text](image-3.png)
+![alt text](assets/image-3.png)
 
 Pin the extension if desired.
 
-![alt text](image-4.png)
+![alt text](assets/image-4.png)
 
 Now that you have the extension installed, open up the "test.html" file and try it out.
 
-![alt text](image-5.png)
+![alt text](assets/image-5.png)
 
 You should see that when you mouse over a URL, there will be a lot of nasty stuff like this:
 
-![alt text](image-6.png)
+![alt text](assets/image-6.png)
 
 However, when you click that link, you will get a nice clean sanitized version!
 
-![alt text](image-7.png)
+![alt text](assets/image-7.png)
 
-
-After you get it installed, try your luck with something like a crazy Amazon link.
-
-[Click me](https://www.amazon.com/Special-Ingredients-Purple-Instant-Practical/dp/B07P6F6TKL/ref=sr_1_1?dib=dGhpcyBpcyBhIGJ1bmNoIG9mIHN1cGVyZmFrZSBjcnVmIGphbW1lZCBpbnRvIHlvdXIgYXZlcmFnZSB1cmwgLSBpdCBpcyBkZXNpZ25lZCB0byBtYWtlIHlvdSBzdXBlciBzYWQgYW5kIHRvIG1vdGl2YXRlIHlvdSB0byB0ZWFjaCB5b3VyIGNoaWxkZW4gdG8gbmV2ZXIgdXNlIHRoZSBpbnRlcm5ldCBjYXJlbGVzc2x5Cg&dib_tag=se&qid=1784783800&sr=8-1)
 
 **Options**
 
 You can manage some options, add custom domains, export and import from the extension as well.
 
-![alt text](image-8.png)
+![alt text](assets/image-8.png)
 
 
 ## AI Usage
 
-This tool was guided through the use of OpenAI in development.  All code was manually reviewed. Manual modification of a few errors, commenting, and rule changes were part of my guidance. I also named it, which is very important. 
+This tool was guided through the use of OpenAI in development.  All code was manually reviewed for sanity and security. Manual modification of a few errors, commenting, and rule changes were part of my guidance. I also named it, which is very important. 
