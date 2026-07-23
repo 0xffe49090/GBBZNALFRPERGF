@@ -96,7 +96,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
 2. Open the extensions page in Chrome.
 3. Enable "Developer mode".
-4. Choose "Load unpacked" and select the `GBBZNALFRPERGF/4_UNCRUFT/chromium` folder that you cloned from above.
+4. Choose "Load unpacked" and select the `GBBZNALFRPERGF/4_UNCRUFT/dist/chromium` folder that you cloned from above.
 
     So, in pictures.
 
@@ -118,7 +118,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
     ```
 
 2. Type `about:debugging#/runtime/this-firefox` into the Firefox URL.
-3. Load "Temporary Add-on" by selecting the "manifest.json" by choosing the `uncruft-source-1.0.1/dist/firefox` folder.
+3. Load "Temporary Add-on" by selecting the "manifest.json" by choosing the `GBBZNALFRPERGF/4_UNCRUFT/dist/firefox` folder.
 
     ![alt text](assets/image-2.png)
 
