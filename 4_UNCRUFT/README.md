@@ -5,10 +5,11 @@ Uncruftify your URLs!
 **Quick start:**
 
 1. Download the zip (Chrome or Firefox).
-   1. [Chrome](https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/uncruft-chromium-1.0.0.zip)
-   2. [Firefox](https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/uncruft-firefox-1.0.0.zip)
+   1. [Chrome](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/uncruft-chromium-1.0.0.zip)
+   2. [Firefox](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/main/4_UNCRUFT/uncruft-firefox-1.0.0.zip)
 2. Unzip it.
 3. Install the extension.
+
 
 ## Problem Definition  
 
