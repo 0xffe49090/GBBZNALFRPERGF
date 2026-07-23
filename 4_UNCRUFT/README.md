@@ -98,7 +98,7 @@ Pin the extension if desired.
 
 ![alt text](assets/image-4.png)
 
-Now that you have the extension installed, open up the "test.html" file and try it out.
+Now that you have the extension installed, try surfing with it a bit, or open up the "[test.html](https://raw.githubusercontent.com/0xffe49090/GBBZNALFRPERGF/refs/heads/main/4_UNCRUFT/uncruft-source-1.0.0/tests/test.html)" from the source code try that out.
 
 ![alt text](assets/image-5.png)
 
