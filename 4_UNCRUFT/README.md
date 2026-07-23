@@ -8,6 +8,7 @@ A browser extension to remove junk from URLs.
 2. Open either Chrome or Firefox, enabling developer mode for testing.
 3. Install the extension by pointing to the appropriate folder.
 
+Read the [installation instructions](##-Installation-and-Usage) for more info.
 
 **Simple test**
 
@@ -117,21 +118,19 @@ At this time, I am not aware of issues, however I am sure there is room for impr
     ```
 
 2. Type `about:debugging#/runtime/this-firefox` into the Firefox URL.
-3. Load "Temporary Add-on" by selecting the "manifest.json". Firefox also seems to load the zip file just fine, but your mileage may vary.
+3. Load "Temporary Add-on" by selecting the "manifest.json" by choosing the `uncruft-source-1.0.1/dist/firefox` folder.
 
-Likewise.
+    ![alt text](assets/image-2.png)
 
-![alt text](assets/image-2.png)
+    Select the "manifest.json" file. 
 
-Select the "manifest.json" file. 
+    ![alt text](assets/image-3.png)
 
-![alt text](assets/image-3.png)
+    Pin the extension if desired.
 
-Pin the extension if desired.
+    ![alt text](assets/image-4.png)
 
-![alt text](assets/image-4.png)
-
-Now that you have the extension installed, try surfing with it a bit, or open up the "[test.html](https://raw.githubusercontent.com/0xffe49090/GBBZNALFRPERGF/refs/heads/main/4_UNCRUFT/uncruft-source-1.0.0/tests/test.html)" from the source code try that out.
+Now that you have the extension installed, try surfing with it a bit, or open up the "[test.html](https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/tests/test.html)" in a browser from the source code "tests" folder and try that out.
 
 ![alt text](assets/image-5.png)
 
