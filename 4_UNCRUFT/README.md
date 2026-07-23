@@ -8,7 +8,7 @@ A browser extension to remove junk from URLs.
 2. Open either Chrome or Firefox, enabling developer mode for testing.
 3. Install the extension by pointing to the appropriate folder.
 
-Read the [installation instructions](##-Installation-and-Usage) for more info.
+Read the [installation instructions](#installation-and-usage) for more info.
 
 **Simple test**
 
