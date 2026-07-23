@@ -1,15 +1,29 @@
 # UNCRUFT
 
-Uncruftify your URLs! 
+A browser extension to remove junk from URLs.
 
 **Quick start:**
 
-1. Download the zip (Chrome or Firefox).
-   1. [Chrome](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/uncruft-chromium-1.0.0.zip)
-   2. [Firefox](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/uncruft-firefox-1.0.0.zip)
-2. Unzip it.
-3. Install the extension.
+1. Clone the repo. 
+2. Open either Chrome or Firefox, enabling developer mode for testing.
+3. Install the extension by pointing to the appropriate folder.
 
+
+**Simple test**
+
+Goal: Avoid leaking that I collect all of my bird research references with ChatGPT.
+
+Copy this and paste it in. 
+
+* `https://www.press.jhu.edu/books/title/9274/ducks-geese-and-swans-north-america?utm_source=chatgpt.com`
+
+Provided you have the extension installed, you should get this as the final URL.
+
+* `https://www.press.jhu.edu/books/title/9274/ducks-geese-and-swans-north-america`
+
+Hooray! No one knows you AI everything.
+
+----
 
 ## Problem Definition  
 
@@ -61,16 +75,27 @@ Like many (all?) browser extensions, Uncruft uses JavaScript, HTML, CSS, and a f
 
 Uncruft was tested and worked in various simple use-cases. Uncruft was loaded in Chrome and Firefox. I used an HTML file full of URLs with trackers and essentially clicked them all to see how it worked. It was.. very scientific.  However, from my testing it worked pretty well and didn't cause a hit on resources. 
 
-At this time, I am not aware of issues, however I am sure there is room for improvement and for those edge cases. 
+**Known Issues**
+
+At this time, I am not aware of issues, however I am sure there is room for improvement and for those edge cases. It is definitely not a perfect privacy tool, either. Don't bet the farm on perfect software. 
 
 
 ## Installation and Usage
 
-**Chrome/Vivaldi:** 
+**Chrome/Vivaldi:**
 
-1. Extract `uncruft-chromium-1.0.0.zip`
+1. Clone the repo.
+
+    ```
+    $ git clone https://github.com/0xffe49090/GBBZNALFRPERGF
+    Cloning into 'GBBZNALFRPERGF'...
+    ..
+    $ cd GBBZNALFRPERGF/4_UNCRUFT
+    ```
+
 2. Open the extensions page in Chrome.
-3. Enable "Developer mode", and "Load unpacked".
+3. Enable "Developer mode".
+4. Choose "Load unpacked" and select the `GBBZNALFRPERGF/4_UNCRUFT/chromium` folder that you cloned from above.
 
     So, in pictures.
 
@@ -82,7 +107,15 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
 **Firefox** 
 
-1. Extract `uncruft-firefox-1.0.0.zip`
+1. Clone the repo.
+
+    ```
+    $ git clone https://github.com/0xffe49090/GBBZNALFRPERGF
+    Cloning into 'GBBZNALFRPERGF'...
+    ..
+    $ cd GBBZNALFRPERGF/4_UNCRUFT
+    ```
+
 2. Type `about:debugging#/runtime/this-firefox` into the Firefox URL.
 3. Load "Temporary Add-on" by selecting the "manifest.json". Firefox also seems to load the zip file just fine, but your mileage may vary.
 
@@ -102,7 +135,7 @@ Now that you have the extension installed, try surfing with it a bit, or open up
 
 ![alt text](assets/image-5.png)
 
-You should see that when you mouse over a URL, there will be a lot of nasty stuff like this:
+You should see that when you mouse oever a URL, there will be a lot of nasty stuff like this:
 
 ![alt text](assets/image-6.png)
 
