@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Uncruft Settings</title><link rel="stylesheet" href="common.css"></head><body><main>
+<div class="row space"><div><h1>Uncruft</h1><p>Strip tracking, attribution, and accidental user-specific URL state before navigation or sharing.</p></div>
+<label><input id="enabled" type="checkbox"> Enabled</label></div>
+<section class="card"><h2>Global removal</h2><p>One exact, case-sensitive parameter per line.</p><textarea id="globalRemove" spellcheck="false"></textarea></section>
+<div class="grid">
+<section class="card"><h2>Domain-specific removal</h2><p>JSON mapping domains to additional parameters.</p><textarea id="domainRemove" spellcheck="false"></textarea></section>
+<section class="card"><h2>Domain exceptions</h2><p>JSON mapping domains to global parameters that must survive.</p><textarea id="domainExceptions" spellcheck="false"></textarea></section>
+</div>
+<section class="card"><h2>Remove every parameter</h2><p>One domain per line. This may break application state.</p>
+<textarea id="removeAllDomains" spellcheck="false" style="min-height:100px"></textarea>
+<label style="margin-top:12px"><input id="cleanSubframes" type="checkbox"> Also clean subframe navigations</label></section>
+<section class="card"><h2>URL test bench</h2><div class="row">
+<input id="testUrl" type="url" value="https://example.com/report?id=42&utm_source=chatgpt.com&fbclid=junk">
+<button id="testButton">Test navigation</button><button id="shareTestButton">Test sharing</button></div>
+<p id="testOutput" class="output"></p></section>
+<div class="row"><button id="save" class="primary">Save and apply</button><button id="export">Export JSON</button>
+<button id="import">Import JSON</button><button id="reset" class="danger">Reset defaults</button>
+<input id="importFile" type="file" accept="application/json" hidden></div><p id="status" class="status"></p>
+</main><script src="api.js"></script><script src="rules.js"></script><script src="options.js"></script></body></html>
