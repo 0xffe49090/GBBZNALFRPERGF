@@ -4,8 +4,11 @@ A browser extension to remove junk from URLs.
 
 **Quick start:**
 
-1. Clone the repo. 
-2. Open either Chrome or Firefox, enabling developer mode for testing.
+1. Grab the zip for your browser and unzip it.
+   1. [Chrome/Vivaldi](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/dist/uncruft-chromium-1.1.0.zip)
+   2. [Edge](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/dist/uncruft-edge-1.1.0.zip)
+   3. [Firefox](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/dist/uncruft-firefox-1.1.0.zip)
+2. Open your target browser, enabling developer mode for testing.
 3. Install the extension by pointing to the appropriate folder.
 
 Read the [installation instructions](#installation-and-usage) for more info.
@@ -26,11 +29,11 @@ Hooray! No one knows you AI everything.
 
 ---
 
-**v1.1.0 UPDATE**
+**UPDATE v1.1.0**
 
 I added some new functionality and changes at the request of some of my peers. 
 
-1. Uncruft's self-test mode. 
+1. **Uncruft's self-test mode. **
 
 You can now just use the UI, select the extension, and choose the "Run self-test".
 
@@ -40,13 +43,13 @@ You'll get something like follows.
 
 ![alt text](assets/selftest-result.png)
 
-2. Clarity in what Uncruft logging. Simply select the Uncruft icon in your browser and view the "Recent Activity". Uncruft currently stashes the last 50 sites browsed to.
+2. **Clarity in what Uncruft logging.** Simply select the Uncruft icon in your browser and view the "Recent Activity". Uncruft currently stashes the last 50 sites browsed to.
 
 ![alt text](assets/logging.png)
 
-3. A Microsoft Edge version. It should similar to installing in Chrome, but just scrolldown to read about it. 
+3. **A Microsoft Edge version.** It should similar to installing in Chrome, but just scrolldown to read about it. 
 
-4. Installation should be easier. Just download the zip appropriate for your browser and follow the instructions below. This is not yet in the various extension stores, and so for the time being, you will have to enable developer mode for testing it out.
+4. **Installation should be easier.** Just download the zip appropriate for your browser and follow the instructions below. This is not yet in the various extension stores, and so for the time being, you will have to enable developer mode for testing it out.
 
 ----
 
@@ -107,21 +110,19 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
 ## Installation and Usage
 
+1. Download the appropriate zip for your browser.
+   1. [Chrome/Vivaldi](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/dist/uncruft-chromium-1.1.0.zip)
+   2. [Edge](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/dist/uncruft-edge-1.1.0.zip)
+   3. [Firefox](https://github.com/0xffe49090/GBBZNALFRPERGF/raw/refs/heads/main/4_UNCRUFT/dist/uncruft-firefox-1.1.0.zip)
+
+2. Unzip the folder.
+
 **Chrome/Vivaldi:**
 
-1. Clone the repo.
-
-    ```
-    $ git clone https://github.com/0xffe49090/GBBZNALFRPERGF
-    Cloning into 'GBBZNALFRPERGF'...
-    ..
-    $ cd GBBZNALFRPERGF/4_UNCRUFT
-    ```
-
-2. Open the extensions page in Chrome.
-3. Enable "Developer mode".
-4. Choose "Load unpacked" and select the `GBBZNALFRPERGF/4_UNCRUFT/dist/chromium` folder that you cloned from above.
-
+1. Open the extensions pane in your browser.
+2. Enable "Developer mode".
+3. Choose "Load unpacked" and select the folder you unzipped.
+4. 
     So, in pictures.
 
     ![alt text](assets/image.png)
@@ -132,17 +133,8 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
 **Firefox** 
 
-1. Clone the repo.
-
-    ```
-    $ git clone https://github.com/0xffe49090/GBBZNALFRPERGF
-    Cloning into 'GBBZNALFRPERGF'...
-    ..
-    $ cd GBBZNALFRPERGF/4_UNCRUFT
-    ```
-
-2. Type `about:debugging#/runtime/this-firefox` into the Firefox URL.
-3. Load "Temporary Add-on" by selecting the "manifest.json" by choosing the `GBBZNALFRPERGF/4_UNCRUFT/dist/firefox` folder.
+1. Type `about:debugging#/runtime/this-firefox` into the Firefox URL.
+2. Load "Temporary Add-on" by selecting the "manifest.json" by choosing the folder where you unzipped the extension.
 
     ![alt text](assets/image-2.png)
 
@@ -153,18 +145,6 @@ At this time, I am not aware of issues, however I am sure there is room for impr
     Pin the extension to expose its functionality best. 
 
     ![alt text](assets/image-4.png)
-
-Now that you have the extension installed, try surfing with it a bit, or open up the "[test.html](https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/tests/test.html)" in a browser from the source code "tests" folder and try that out.
-
-![alt text](assets/image-5.png)
-
-You should see that when you mouse oever a URL, there will be a lot of nasty stuff like this:
-
-![alt text](assets/image-6.png)
-
-However, when you click that link, you will get a nice clean sanitized version!
-
-![alt text](assets/image-7.png)
 
 
 **Microsoft Edge**
@@ -198,8 +178,21 @@ You can manage some options, add custom domains, export and import from the exte
 
 Ideally the extension will work the same in any supported browser. Essentially, after you have installed the extension, simply select Uncruft's icon in the browser, and choose "Run self-test".
 
-![](_assets/README-20260805-4.png)
+![](assets/README-20260805-4.png)
 
+**There is an HTML test file in this repository as well.** This can be helpful if you want to see what Uncruft does and to test out its logging functionality.
+
+Now that you have the extension installed, try surfing with it a bit, or open up the "[test-links.html](https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/tests/test-links.html)" in a browser from the source code "tests" folder and try that out.
+
+![alt text](assets/image-5.png)
+
+You should see that when you mouse oever a URL, there will be a lot of nasty stuff like this:
+
+![alt text](assets/image-6.png)
+
+However, when you click that link, you will get a nice clean sanitized version!
+
+![alt text](assets/image-7.png)
 
 ## AI Usage
 
