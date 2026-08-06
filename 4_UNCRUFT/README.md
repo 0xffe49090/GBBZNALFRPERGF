@@ -33,7 +33,7 @@ Hooray! No one knows you AI everything.
 
 I added some new functionality and changes at the request of some of my peers. 
 
-1. **Uncruft's self-test mode. **
+1. **Uncruft's self-test mode.**
 
 You can now just use the UI, select the extension, and choose the "Run self-test".
 
@@ -43,13 +43,13 @@ You'll get something like follows.
 
 ![alt text](assets/selftest-result.png)
 
-2. **Clarity in what Uncruft logging.** Simply select the Uncruft icon in your browser and view the "Recent Activity". Uncruft currently stashes the last 50 sites browsed to.
+2. **Clarity in what Uncruft does.** Simply select the Uncruft icon in your browser and view the "Recent Activity". Uncruft currently stashes the last 50 sites browsed to.
 
 ![alt text](assets/logging.png)
 
 3. **A Microsoft Edge version.** It should similar to installing in Chrome, but just scrolldown to read about it. 
 
-4. **Installation should be easier.** Just download the zip appropriate for your browser and follow the instructions below. This is not yet in the various extension stores, and so for the time being, you will have to enable developer mode for testing it out.
+4. **Installation should be easier.** I hope so, anyway. Just download the zip appropriate for your browser and follow the instructions below. This is not yet in the various extension stores, and so for the time being, you will have to enable developer mode for testing it out.
 
 ----
 
@@ -127,7 +127,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
     ![alt text](assets/image.png)
 
-    Pin the extension to expose its functionality best. 
+    Pin the extension to expose its functionality. 
 
     ![alt text](assets/image-1.png)
 
@@ -142,7 +142,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
     ![alt text](assets/image-3.png)
 
-    Pin the extension to expose its functionality best. 
+    Pin the extension to expose its functionality. 
 
     ![alt text](assets/image-4.png)
 
@@ -162,7 +162,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
 ![](assets/README-20260805-2.png)
 
-5. Pin the extension to expose its functionality best. 
+5. Pin the extension to expose its functionality. 
 
 ![](assets/README-20260805-3.png)
 
@@ -180,13 +180,16 @@ Ideally the extension will work the same in any supported browser. Essentially, 
 
 ![](assets/README-20260805-4.png)
 
-**There is an HTML test file in this repository as well.** This can be helpful if you want to see what Uncruft does and to test out its logging functionality.
+From there, just navigate around the web normally and see how it works. 
+
+**Additional testing**
+There is an HTML test file in this repository as well. This can be helpful if you want to see what Uncruft does and to test out its logging functionality.
 
 Now that you have the extension installed, try surfing with it a bit, or open up the "[test-links.html](https://github.com/0xffe49090/GBBZNALFRPERGF/blob/main/4_UNCRUFT/tests/test-links.html)" in a browser from the source code "tests" folder and try that out.
 
 ![alt text](assets/image-5.png)
 
-You should see that when you mouse oever a URL, there will be a lot of nasty stuff like this:
+You should see that when you mouse oever a URL, there will be a lot of nasty parameters like this screenshot shows:
 
 ![alt text](assets/image-6.png)
 
