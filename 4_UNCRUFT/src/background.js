@@ -295,9 +295,30 @@ function cleanUrlForSharing(rawUrl, rawConfig) {
 const DEFAULT_CONFIG = {"enabled": true, "globalRemove": ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "utm_name", "utm_reader", "gclid", "dclid", "gbraid", "wbraid", "gclsrc", "msclkid", "twclid", "yclid", "fbclid", "igshid", "ttclid", "li_fat_id", "mc_cid", "mc_eid", "mkt_tok", "vero_conv", "vero_id", "oly_anon_id", "oly_enc_id", "_hsenc", "_hsmi", "hsCtaTracking", "hsa_acc", "hsa_ad", "hsa_cam", "hsa_grp", "hsa_kw", "hsa_mt", "hsa_net", "hsa_src", "hsa_tgt", "pk_campaign", "pk_kwd", "pk_keyword", "pk_source", "pk_medium", "pk_content", "sc_campaign", "sc_channel", "sc_content", "sc_medium", "sc_outcome", "sc_geo", "sc_country", "s_cid", "s_kwcid", "ef_id", "epik", "irclickid", "wickedid", "zanpid", "sscid", "affid", "aff_id", "affiliate", "aff_sub", "aff_sub2", "aff_sub3", "afftrack", "clickref", "click_ref", "clickid", "click_id", "campaignid", "adgroupid", "adid", "adset_id", "creative", "creative_id", "placement", "network", "trk", "trkCampaign", "trkContact", "trkModule", "trkMsg", "trk_sid", "tracking_id", "trackingid", "vero_campaign", "vero_email", "dm_i", "soc_src", "soc_trk", "soc_pid", "ncid", "icid", "icampaign", "icreative", "ref_src", "ref_url", "referrer", "refid", "sourceid", "source_id", "_ga", "_gl", "ga_campaign", "ga_content", "ga_medium", "ga_source", "fb_action_ids", "fb_action_types", "fb_source", "mibextid", "spm", "scm", "sp_atk", "xptdk", "igsh", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "embeds_referring_euri", "embeds_referring_origin"], "domainRemove": {"amazon.com": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.ca": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.co.uk": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.de": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.fr": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.es": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.it": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "amazon.co.jp": ["_encoding", "ref", "ref_", "refRID", "pd_rd_w", "pd_rd_wg", "pd_rd_r", "pd_rd_i", "pd_rd_p", "pf_rd_m", "pf_rd_p", "pf_rd_r", "pf_rd_s", "pf_rd_t", "pf_rd_i", "content-id", "ascsubtag", "tag", "linkCode", "camp", "creative", "creativeASIN", "crid", "keywords", "sprefix"], "youtube.com": ["si", "feature"], "youtu.be": ["si", "feature"]}, "domainExceptions": {}, "removeAllDomains": [], "cleanSubframes": false};
 let applyQueue = Promise.resolve();
 const navigationState = new Map();
+const ACTIVITY_KEY = "activityLog";
+const MAX_ACTIVITY_ENTRIES = 50;
 
 function logInfo(event, details = {}) {
   console.info(`[Uncruft] ${event}`, details);
+}
+
+async function recordActivity(type, message, details = {}) {
+  const entry = {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    type,
+    message,
+    details,
+    timestamp: new Date().toISOString()
+  };
+  try {
+    const stored = await storageGet([ACTIVITY_KEY]);
+    const activity = Array.isArray(stored[ACTIVITY_KEY]) ? stored[ACTIVITY_KEY] : [];
+    activity.unshift(entry);
+    await storageSet({ [ACTIVITY_KEY]: activity.slice(0, MAX_ACTIVITY_ENTRIES) });
+  } catch (error) {
+    logError("Could not store activity", error);
+  }
+  return entry;
 }
 
 function logError(event, error) {
@@ -370,12 +391,14 @@ async function applyRulesNow(reason = "unspecified") {
     compiledRuleCount: next.length,
     lastCompiledAt: new Date().toISOString()
   });
-  logInfo("Rules applied", {
+  const details = {
     reason,
     previousRuleCount: existing.length,
     ruleCount: next.length,
     enabled: config.enabled
-  });
+  };
+  logInfo("Rules applied", details);
+  await recordActivity("rules", `Loaded ${next.length} URL-cleaning rules.`, details);
   return next.length;
 }
 
@@ -412,12 +435,20 @@ if (ext.webNavigation?.onBeforeNavigate) {
         observedAt: new Date().toISOString()
       };
       await rememberNavigation(details.tabId, state);
-      logInfo("Navigation cleaned", {
+      const hostname = new URL(details.url).hostname;
+      const activityDetails = {
         tabId: details.tabId,
+        hostname,
         original: details.url,
         cleaned: result.cleaned,
         removed: result.removed
-      });
+      };
+      logInfo("Navigation cleaned", activityDetails);
+      await recordActivity(
+        "cleaned",
+        `Removed ${result.removed.length} marketing or tracking parameter${result.removed.length === 1 ? "" : "s"} from ${hostname}.`,
+        activityDetails
+      );
     } catch (error) {
       logError("Navigation observation failed", error);
     }
@@ -439,6 +470,21 @@ ext.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "get-navigation-state") {
     getNavigation(message.tabId)
       .then(state => sendResponse({ ok: true, state }))
+      .catch(error => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+
+
+  if (message?.type === "get-activity") {
+    storageGet([ACTIVITY_KEY])
+      .then(stored => sendResponse({ ok: true, activity: stored[ACTIVITY_KEY] ?? [] }))
+      .catch(error => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+
+  if (message?.type === "clear-activity") {
+    storageSet({ [ACTIVITY_KEY]: [] })
+      .then(() => sendResponse({ ok: true }))
       .catch(error => sendResponse({ ok: false, error: error.message }));
     return true;
   }

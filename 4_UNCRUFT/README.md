@@ -24,6 +24,30 @@ Provided you have the extension installed, you should get this as the final URL.
 
 Hooray! No one knows you AI everything.
 
+---
+
+**v1.1.0 UPDATE**
+
+I added some new functionality and changes at the request of some of my peers. 
+
+1. Uncruft's self-test mode. 
+
+You can now just use the UI, select the extension, and choose the "Run self-test".
+
+![alt text](assets/selftest.png)
+
+You'll get something like follows.
+
+![alt text](assets/selftest-result.png)
+
+2. Clarity in what Uncruft logging. Simply select the Uncruft icon in your browser and view the "Recent Activity". Uncruft currently stashes the last 50 sites browsed to.
+
+![alt text](assets/logging.png)
+
+3. A Microsoft Edge version. It should similar to installing in Chrome, but just scrolldown to read about it. 
+
+4. Installation should be easier. Just download the zip appropriate for your browser and follow the instructions below. This is not yet in the various extension stores, and so for the time being, you will have to enable developer mode for testing it out.
+
 ----
 
 ## Problem Definition  
@@ -102,7 +126,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
     ![alt text](assets/image.png)
 
-    Pin the extension if you want to.
+    Pin the extension to expose its functionality best. 
 
     ![alt text](assets/image-1.png)
 
@@ -126,7 +150,7 @@ At this time, I am not aware of issues, however I am sure there is room for impr
 
     ![alt text](assets/image-3.png)
 
-    Pin the extension if desired.
+    Pin the extension to expose its functionality best. 
 
     ![alt text](assets/image-4.png)
 
@@ -143,11 +167,38 @@ However, when you click that link, you will get a nice clean sanitized version!
 ![alt text](assets/image-7.png)
 
 
+**Microsoft Edge**
+
+1. Clone the repo.
+2. Navigate to the Extensions menu.
+
+![](assets/README-20260805.png)
+
+3. Enable Developer Mode.
+
+![](assets/README-20260805-1.png)
+
+4. Select "Load Unpacked".
+
+![](assets/README-20260805-2.png)
+
+5. Pin the extension to expose its functionality best. 
+
+![](assets/README-20260805-3.png)
+
+
 **Options**
 
 You can manage some options, add custom domains, export and import from the extension as well.
 
 ![alt text](assets/image-8.png)
+
+
+## Testing the Extension
+
+Ideally the extension will work the same in any supported browser. Essentially, after you have installed the extension, simply select Uncruft's icon in the browser, and choose "Run self-test".
+
+![](_assets/README-20260805-4.png)
 
 
 ## AI Usage

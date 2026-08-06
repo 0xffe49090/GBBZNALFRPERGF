@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Uncruft",
   "short_name": "Uncruft",
-  "description": "Strip tracking, attribution, and accidental user-specific URL state before navigation or sharing.",
-  "version": "1.0.1",
+  "description": "Remove marketing, tracking, and link-sharing cruft before navigation or copying.",
+  "version": "1.1.0",
   "permissions": [
     "declarativeNetRequest",
     "storage",
